@@ -19,7 +19,7 @@
 
 class CONTROLService {
 public:
-    const static uint16_t CONTROL_SERVICE_UUID              = 0xA000;
+    const static uint16_t CONTROL_SERVICE_UUID = 0xA000;
     const static uint16_t STATE_CHARACTERISTIC_UUID = 0xA001;
 
     CONTROLService(BLEDevice &_ble, bool initialValueForStateCharacteristic) :
