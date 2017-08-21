@@ -20,17 +20,8 @@
 #include "Bot.h"
 #include "CONTROLService.h"
 
-DigitalOut  led1(p7);
-DigitalOut  motorleft_A(p28); //Motor left
-DigitalOut  motorleft_B(p25); //
-DigitalOut  motorright_A(p24); //Motor right
-DigitalOut  motorright_B(p23); //
-DigitalOut  Relay_3A(p22); //Motor skill Q (may bao)
-DigitalOut  Relay_3B(p21); //
-DigitalOut  kichdien(p9);  //relay ac inverter 12DC -220AC
-DigitalOut  kichdienB(p16);
 Serial      pc(p10, p11);
-
+//DigitalOut led1(p7);
 const static char     DEVICE_NAME[] = "BOT BATTLE";
 static const uint16_t uuid16_list[] = {CONTROLService::CONTROL_SERVICE_UUID};
 static uint8_t g_cmd=0;
@@ -38,21 +29,22 @@ static uint8_t g_cmd=0;
 static EventQueue eventQueue(/* event count */ 10 * EVENTS_EVENT_SIZE);
 
 CONTROLService *CONTROLServicePtr;
-Bot	Bot_battle;
+Bot Battle(p7,p25,p24,p23,p22,p21,p9);
 
 void disconnectionCallback(const Gap::DisconnectionCallbackParams_t *params)
 {
     (void) params;
     BLE::Instance().gap().startAdvertising();
-    led1 = 0;
+  //  led1 = 0;
     pc.printf("\n\r Disconnection \n\r");
 }
 
 void connectionCallback(const Gap::ConnectionCallbackParams_t *params)
 {
 	pc.printf("\n\r Connected\n\r");
-	Bot_battle.connection();
-	pc.printf("\n\r %d \n\r",Bot_battle.a);
+//	led1 = 1;
+	Battle.connection();
+	//pc.printf("\n\r %d \n\r",Bot_battle.a);
 }
 
 void onDataWrittenCallback(const GattWriteCallbackParams *params) {
@@ -61,6 +53,8 @@ void onDataWrittenCallback(const GattWriteCallbackParams *params) {
         
     }
     pc.printf("\n\r value %d ",g_cmd);
+    Battle.go_up();
+    
 
 }
 
@@ -118,6 +112,7 @@ int main()
     BLE &ble = BLE::Instance();
     ble.onEventsToProcess(scheduleBleEventsProcessing);
     ble.init(bleInitComplete);
+    
 
     eventQueue.dispatch_forever();
 

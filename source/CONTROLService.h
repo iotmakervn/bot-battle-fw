@@ -16,7 +16,6 @@
 
 #ifndef __BLE_CONTROL_SERVICE_H__
 #define __BLE_CONTROL_SERVICE_H__
-
 class CONTROLService {
 public:
     const static uint16_t CONTROL_SERVICE_UUID = 0xA000;
