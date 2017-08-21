@@ -23,45 +23,47 @@ BUILD VÀ TEST CHƯƠNG TRÌNH
 __Để build một chương trình dựa trên Mbed OS ta thực hiện các bước như sau:__
 1. CLone về dự án ( ví dụ như bot battle)
 
-	```
-	$git clone https://github.com/iotmakervn/bot-battle-fw.git
-	```
+```
+git clone https://github.com/iotmakervn/bot-battle-fw.git
+```
 
-	Hoặc là bạn có thể tạo một dự án mẫu bằng lênh
+Hoặc là bạn có thể tạo một dự án mẫu bằng lênh
 
-	$mbed new NameProjec	
+```
+mbed new NameProjec	
+```
 
 2. Di chuyển đến thư mục chứa dự án.
 
-	```
-	$cd bot-battle-fw
-	```
+```
+cd bot-battle-fw
+```
 
 3. Update source tree
 
-	```
-	$mbed update
-	```
+```
+mbed deploy
+```
 
 4. Thiết lập toolchain mặc định
 
-	```
-	$mbed toolchain GCC_ARM
-	```
+```
+mbed toolchain GCC_ARM
+```
 
 5. Thiết lập target mặc định ( lựa chọn chip)
 
-	Chương trình sẽ chạy trên BOARD VBLUno nên target sẽ chọn là **VBLUNO%!_LEGACY**
+Chương trình sẽ chạy trên BOARD VBLUno nên target sẽ chọn là **VBLUNO51_LEGACY**
 
-	```
-	$mbed target VBLUNO51_LEGACY
-	```
+```
+mbed target VBLUNO51_LEGACY
+```
 
 6. Compile chương trình
 
-	```
-	&mbed compile
-	```
+```
+mbed compile
+```
 
 7. Sau khi Compile thành công, file HEX được tạo sẽ nằm trong thư mục có cấu trúc như sau: ```BUILD/<target-name>/<toolchain>```
 
@@ -78,9 +80,7 @@ GIAO THỨC BLE ĐƯỢC DÙNG TRONG ỨNG DỤNG BOTBATTLE
 
 1. Service
 
-Ứng dụng này sẽ dùng một service có tên là CONTROLservice dùng để điều khiển robot.
-
-UUID:{A000}
+Ứng dụng này sẽ dùng một service có tên là CONTROLservice dùng để điều khiển robot. UUID:{A000}
 
 2. Characteristic
 
