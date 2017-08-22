@@ -24,50 +24,50 @@ __Để build một chương trình dựa trên Mbed OS ta thực hiện các b�
 1. CLone về dự án ( ví dụ như bot battle)
 
 	```
-	$git clone https://github.com/iotmakervn/bot-battle-fw.git
+	git clone https://github.com/iotmakervn/bot-battle-fw.git
 	```
 
 	Hoặc là bạn có thể tạo một dự án mẫu bằng lênh
 
-	$mbed new NameProjec	
+	mbed new NameProjec	
 
 2. Di chuyển đến thư mục chứa dự án.
 
 	```
-	$cd bot-battle-fw
+	cd bot-battle-fw
 	```
 
 3. Update source tree
 
 	```
-	$mbed update
+	mbed update
 	```
 
 4. Thiết lập toolchain mặc định
 
 	```
-	$mbed toolchain GCC_ARM
+	mbed toolchain GCC_ARM
 	```
 
 5. Thiết lập target mặc định ( lựa chọn chip)
 
-	Chương trình sẽ chạy trên BOARD VBLUno nên target sẽ chọn là **VBLUNO%!_LEGACY**
+	Chương trình sẽ chạy trên BOARD VBLUno51 nên target sẽ chọn là **VBLUNO51_LEGACY**
 
 	```
-	$mbed target VBLUNO51_LEGACY
+	mbed target VBLUNO51_LEGACY
 	```
 
 6. Compile chương trình
 
 	```
-	&mbed compile
+	mbed compile
 	```
 
 7. Sau khi Compile thành công, file HEX được tạo sẽ nằm trong thư mục có cấu trúc như sau: ```BUILD/<target-name>/<toolchain>```
 
 	Trong project này thư mục sẽ là ```BUILD/VBLUNO51_LEGACY/GCC_ARM```
 
-	**Lưu ý** Tùy vào target và file được tạo có thể là file `.HEX` hoặc `.BIN`
+	**Lưu ý** Tùy vào target mà file được tạo có thể là file `.HEX` hoặc `.BIN`
 
 8. Kết nối Board VBLUno với máy tính bằng cổng COM. Thư mục DAPLINK sẽ xuất hiện và bạn chỉ cần copy file HEX vừa được tạo vào trong thư mục đó để nạp chương trình
 
@@ -96,4 +96,17 @@ UART service sẽ có characteristic là State
 
 
 
-3. Dữ liệu được nhận từ State_characteristic sẽ được so sánh để thực hiện các chức năng di chuyển hoặc skill của robot
+3. Dữ liệu được nhận từ State_characteristic sẽ được so sánh để thực hiện các chức năng như sau:
+
+| Giá trị | chức năng |
+| ---------- |:-------------:|
+|  1  | go up |
+|  2  | turn left |
+|  3  | go down |
+|  4  | turn right |
+|  5  | stop motion |
+|  7  | turn on skill Q |
+|  9  | turn on skill W |
+|  12  | turn on skill E |
+|  16  | turn on skill R |
+|  19  | turn on reverse robot |

@@ -22,40 +22,35 @@
 
 Serial      pc(p10, p11);
 //DigitalOut led1(p7);
-const static char     DEVICE_NAME[] = "BOT BATTLE";
+const static char     DEVICE_NAME[] = "BOT-GAREN";
 static const uint16_t uuid16_list[] = {CONTROLService::CONTROL_SERVICE_UUID};
 static uint8_t g_cmd=0;
 
 static EventQueue eventQueue(/* event count */ 10 * EVENTS_EVENT_SIZE);
 
 CONTROLService *CONTROLServicePtr;
-Bot Battle(p7,p25,p24,p23,p22,p21,p9);
+Bot Battle(p7,p28,p25,p24,p23,p22,p21);
+//Bot Bot;
 
 void disconnectionCallback(const Gap::DisconnectionCallbackParams_t *params)
 {
     (void) params;
     BLE::Instance().gap().startAdvertising();
-  //  led1 = 0;
+	Battle.disconnection();
     pc.printf("\n\r Disconnection \n\r");
 }
 
 void connectionCallback(const Gap::ConnectionCallbackParams_t *params)
 {
-	pc.printf("\n\r Connected\n\r");
-//	led1 = 1;
 	Battle.connection();
-	//pc.printf("\n\r %d \n\r",Bot_battle.a);
+	pc.printf("\n\r Connected\n\r Ready!");
 }
 
 void onDataWrittenCallback(const GattWriteCallbackParams *params) {
-    if ((params->handle == CONTROLServicePtr->getValueHandle()) && (params->len == 1)) {
-        g_cmd = params->data[0];
-        
+    if ((params->handle == CONTROLServicePtr->getValueHandle()) && (params->len == 1)) {    
+        Battle.process(params->data[0]);       
     }
-    pc.printf("\n\r value %d ",g_cmd);
-    Battle.go_up();
-    
-
+    pc.printf("\n\r value %d ",params->data[0]);
 }
 
 /**
