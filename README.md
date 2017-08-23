@@ -9,7 +9,7 @@ THIẾT LẬP MÔI TRƯỜNG
 * [CMake](http://www.cmake.org/download/).
 * [mbed-cli](https://github.com/ARMmbed/mbed-cli). Please note that **mbed-cli has its own set of dependencies**, listed in the installation instructions.
 * [Python](https://www.python.org/downloads/).
-* [ARM GCC toolchain 4.9.x](https://launchpad.net/gcc-arm-embedded/+milestone/4.9-2015-q3-update).
+* [ARM GCC toolchain](https://gnu-mcu-eclipse.github.io/toolchain/arm/install/).
 * Giả lập serial monitor (ví dụ screen, pySerial)
 
 HARDWARE

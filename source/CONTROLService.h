@@ -1,42 +1,29 @@
-/* mbed Microcontroller Library
- * Copyright (c) 2006-2013 ARM Limited
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 #ifndef __BLE_CONTROL_SERVICE_H__
 #define __BLE_CONTROL_SERVICE_H__
-class CONTROLService {
+class control_service {
 public:
-    const static uint16_t CONTROL_SERVICE_UUID = 0xA000;
-    const static uint16_t STATE_CHARACTERISTIC_UUID = 0xA001;
-
-    CONTROLService(BLEDevice &_ble, bool initialValueForStateCharacteristic) :
-        ble(_ble), State(STATE_CHARACTERISTIC_UUID, &initialValueForStateCharacteristic)
+    const static uint16_t control_service_uuid = 0xA000;  //UUID Service 16bit
+    const static uint16_t state_characteristic_uuid = 0xA001;  //UUID Characteristic 16bit
+/**
+*
+* This contructor is declared and initialized Control Service
+*/
+    control_service(BLEDevice &_ble, bool initialValueForStateCharacteristic) :
+        ble(_ble), state(state_characteristic_uuid, &initialValueForStateCharacteristic)
     {
-        GattCharacteristic *charTable[] = {&State};
-        GattService         CONTROLService(CONTROL_SERVICE_UUID, charTable, sizeof(charTable) / sizeof(GattCharacteristic *));
-        ble.addService(CONTROLService);
+        GattCharacteristic *charTable[] = {&state};
+        GattService         control_service(control_service_uuid, charTable, sizeof(charTable) / sizeof(GattCharacteristic *));
+        ble.addService(control_service);
     }
 
     GattAttribute::Handle_t getValueHandle() const
     {
-        return State.getValueHandle();
+        return state.getValueHandle();
     }
 
 private:
     BLEDevice                         &ble;
-    ReadWriteGattCharacteristic<bool> State;
+    ReadWriteGattCharacteristic<bool> state;
 };
 
-#endif /* #ifndef __BLE_LED_SERVICE_H__ */
+#endif /* #ifndef __BLE_CONTROL_SERVICE_H__ */

@@ -9,12 +9,16 @@ Bot::Bot(PinName led,
 		 PinName relay_w):
 		_led(new DigitalOut(led)),
 		_motor_left_a(new DigitalOut(motor_left_a)), 
-		_motor_left_b(new DigitalOut(motor_left_b)), 
-		_motor_right_a(new DigitalOut(motor_right_a)), 
+		_motor_left_b(new PwmOut(motor_left_b)), 
+		_motor_right_a(new PwmOut(motor_right_a)), 
 		_motor_right_b(new DigitalOut(motor_right_b)),
 		_relay_q(new DigitalOut(relay_q)),
 		_relay_w(new DigitalOut(relay_w)) {}
 Bot::Bot() {}
+/**
+ * 
+ * 
+ */
 void Bot::process(uint8_t g_cmd)
 {
 	if(g_cmd == 1)
@@ -106,7 +110,7 @@ void Bot::skill_q(void)
 }
 void Bot::skill_w(void)
 {
-	_relay_w->write(!_relay_q->read());
+	_relay_w->write(!_relay_w->read());
 }
 void Bot::skill_e(void)
 {
@@ -115,10 +119,10 @@ void Bot::skill_e(void)
 }
 void Bot::skill_r(void)
 {
-//	Bot::go_up();
-//	wait_ms(500);
-//	Bot::go_down();
-//	wait_ms(500);
+	_motor_left_a->write(0.5);
+	_motor_left_b->write(1);
+	_motor_right_a->write(0);
+	_motor_right_b->write(1);
 }
 void Bot::reverse_bot(void)
 {

@@ -1,18 +1,3 @@
-/* mbed Microcontroller Library
- * Copyright (c) 2006-2013 ARM Limited
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
 #include <events/mbed_events.h>
 #include <mbed.h>
@@ -21,16 +6,12 @@
 #include "CONTROLService.h"
 
 Serial      pc(p10, p11);
-//DigitalOut led1(p7);
 const static char     DEVICE_NAME[] = "BOT-GAREN";
-static const uint16_t uuid16_list[] = {CONTROLService::CONTROL_SERVICE_UUID};
-static uint8_t g_cmd=0;
-
+static const uint16_t uuid16_list[] = {control_service::control_service_uuid};
 static EventQueue eventQueue(/* event count */ 10 * EVENTS_EVENT_SIZE);
 
-CONTROLService *CONTROLServicePtr;
+control_service *control_servicePtr;
 Bot Battle(p7,p28,p25,p24,p23,p22,p21);
-//Bot Bot;
 
 void disconnectionCallback(const Gap::DisconnectionCallbackParams_t *params)
 {
@@ -47,10 +28,10 @@ void connectionCallback(const Gap::ConnectionCallbackParams_t *params)
 }
 
 void onDataWrittenCallback(const GattWriteCallbackParams *params) {
-    if ((params->handle == CONTROLServicePtr->getValueHandle()) && (params->len == 1)) {    
+    if ((params->handle == control_servicePtr->getValueHandle()) && (params->len == 1)) {    
         Battle.process(params->data[0]);       
     }
-    pc.printf("\n\r value %d ",params->data[0]);
+	pc.printf("received value:%d \n\r",params->data[0]);
 }
 
 /**
@@ -85,7 +66,7 @@ void bleInitComplete(BLE::InitializationCompleteCallbackContext *params)
     ble.gattServer().onDataWritten(onDataWrittenCallback);
 
     bool initialValueForStateCharacteristic = false;
-    CONTROLServicePtr = new CONTROLService(ble, initialValueForStateCharacteristic);
+    control_servicePtr = new control_service(ble, initialValueForStateCharacteristic);
 
     /* setup advertising */
     ble.gap().accumulateAdvertisingPayload(GapAdvertisingData::BREDR_NOT_SUPPORTED | GapAdvertisingData::LE_GENERAL_DISCOVERABLE);
@@ -107,9 +88,7 @@ int main()
     BLE &ble = BLE::Instance();
     ble.onEventsToProcess(scheduleBleEventsProcessing);
     ble.init(bleInitComplete);
-    
-
+    pc.printf("\n\rGAREN\n\r");
     eventQueue.dispatch_forever();
-
     return 0;
 }
