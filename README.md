@@ -92,18 +92,18 @@ Characteristic UUID: `0xA001`, size 1 byte, Read, Write - dùng để gởi comm
 
 3. Command sẽ được so sánh để thực hiện các chức năng như sau:
 
-| Giá trị    | chức năng                                 |
-| ---------- | :-------------:                           |
-| 0x0`n`     | chạy tới với tốc độ `n` (0..F)            |
-| 0x1`n`     | xoay trái tốc độ `n` (0..F)               |
-| 0x2`n`     | xoay phải tốc độ `n` (0..F)               |
-| 0x3`n`     | chạy lùi tốc độ `n` (0..F)                |
-| 0x50       | Dừng                                      |
-| 0x70       | turn on skill Q                           |
-| 0x71       | turn on skill W                           |
-| 0x72       | turn on skill E                           |
-| 0x73       | turn on skill R                           |
-| 0x81       | turn on reverse robot                     |
-| 0x80       | turn off reverse robot                    |
-| 0x91       | Vào chế độ tự động xoay khi mất kết nối   |
-| 0x90       | Thoát chế độ tự động xoay khi mất kết nối |
+| Giá trị    | chức năng                                      |
+| ---------- | :-------------:                                |
+| 0x0n       | chạy tới với tốc độ n (0..F), ví dụ 0x01, 0x05 |
+| 0x1n       | xoay trái tốc độ n (0..F), ví dụ 0x11, 0x1F    |
+| 0x2n       | xoay phải tốc độ n (0..F)                      |
+| 0x3n       | chạy lùi tốc độ n (0..F)                       |
+| 0x50       | Dừng                                           |
+| 0x70       | turn on skill Q                                |
+| 0x71       | turn on skill W                                |
+| 0x72       | turn on skill E                                |
+| 0x73       | turn on skill R                                |
+| 0x81       | turn on reverse robot                          |
+| 0x80       | turn off reverse robot                         |
+| 0x91       | Vào chế độ tự động xoay khi mất kết nối        |
+| 0x90       | Thoát chế độ tự động xoay khi mất kết nối      |
