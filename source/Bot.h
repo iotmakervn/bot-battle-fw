@@ -17,7 +17,8 @@ private:
     DigitalOut  *_relay_q;
     DigitalOut  *_relay_w;
     uint8_t reverse;
-
+    uint8_t auto_rotate;
+    float convert_speed(uint8_t speed);
 public:
     /**
     *contructor to changing pinname
@@ -33,13 +34,13 @@ public:
     /**
     *Rotbot control menthods
     */
-    void connection(void);
-    void disconnection(void);
+    void connect(void);
+    void disconnect(void);
     void process(uint8_t g_cmd);
-    void go_up(void);
-    void go_down(void);
-    void go_right(void);
-    void go_left(void);
+    void go_up(uint8_t speed);
+    void go_down(uint8_t speed);
+    void go_right(uint8_t speed);
+    void go_left(uint8_t speed);
     void skill_q(void);
     void skill_w(void);
     void skill_e(void);

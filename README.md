@@ -78,38 +78,32 @@ mbed compile
 
 9. Reset lại chip.
 
-GIAO THỨC BLE ĐƯỢC DÙNG TRONG ỨNG DỤNG BOTBATTLE
----------------------------------------------------
-
-1. Service
-
-Ứng dụng này sẽ dùng một service có tên là CONTROLservice dùng để điều khiển robot. UUID:{A000}
-
-2. Characteristic
-
-UART service sẽ có characteristic là State
-
-**State-characteristic**
-
-* UUID:{A001}
-
-* Chức năng: Nhận dữ  liệu từ BLE central (smartphone)
-
-* Các thao tác dữ liệu: READ/WRITE
+### GIAO THỨC BLE ĐƯỢC DÙNG TRONG ỨNG DỤNG BOTBATTLE
 
 
+#### Service
 
-3. Dữ liệu được nhận từ State_characteristic sẽ được so sánh để thực hiện các chức năng như sau:
+UUID `A000` có 1 Characteristic
 
-| Giá trị | chức năng |
-| ---------- |:-------------:|
-|  1  | go up |
-|  2  | turn left |
-|  3  | go down |
-|  4  | turn right |
-|  5  | stop motion |
-|  7  | turn on skill Q |
-|  9  | turn on skill W |
-|  12  | turn on skill E |
-|  16  | turn on skill R |
-|  19  | turn on reverse robot |
+#### Characteristic
+
+Characteristic UUID: `0xA001`, size 1 byte, Read, Write - dùng để gởi command
+
+
+3. Command sẽ được so sánh để thực hiện các chức năng như sau:
+
+| Giá trị    | chức năng                                 |
+| ---------- | :-------------:                           |
+| 0x0`n`     | chạy tới với tốc độ `n` (0..F)            |
+| 0x1`n`     | xoay trái tốc độ `n` (0..F)               |
+| 0x2`n`     | xoay phải tốc độ `n` (0..F)               |
+| 0x3`n`     | chạy lùi tốc độ `n` (0..F)                |
+| 0x50       | Dừng                                      |
+| 0x70       | turn on skill Q                           |
+| 0x71       | turn on skill W                           |
+| 0x72       | turn on skill E                           |
+| 0x73       | turn on skill R                           |
+| 0x81       | turn on reverse robot                     |
+| 0x80       | turn off reverse robot                    |
+| 0x91       | Vào chế độ tự động xoay khi mất kết nối   |
+| 0x90       | Thoát chế độ tự động xoay khi mất kết nối |

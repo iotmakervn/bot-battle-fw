@@ -22,13 +22,13 @@ void disconnectionCallback(const Gap::DisconnectionCallbackParams_t *params)
 {
     (void) params;
     BLE::Instance().gap().startAdvertising();
-    Battle.disconnection();
+    Battle.disconnect();
     pc.printf("\n\r Disconnection \n\r");
 }
 
 void connectionCallback(const Gap::ConnectionCallbackParams_t *params)
 {
-    Battle.connection();
+    Battle.connect();
     pc.printf("\n\r Connected\n\r Ready!");
 }
 
