@@ -15,7 +15,7 @@ Bot::Bot(PinName led,
     _relay_q(new DigitalOut(relay_q)),
     _relay_w(new DigitalOut(relay_w)) {
     reverse = 0;
-    auto_rotate = 0;
+    auto_rotate = 1;
 }
 
 Bot::Bot() {
@@ -84,10 +84,9 @@ void Bot::connect(void)
 }
 void Bot::disconnect(void)
 {
-    Bot::skill_e();
     _led->write(0);
     if(auto_rotate) {
-        go_right(15);
+        Bot::skill_e();   
     }
 }
 void Bot::go_up(uint8_t speed)
@@ -95,14 +94,14 @@ void Bot::go_up(uint8_t speed)
     float f = convert_speed(speed);
     _motor_left_a->write(0);
     _motor_left_b->write(f);
-    _motor_right_a->write(0);
-    _motor_right_b->write(f);
+    _motor_right_a->write(1-f);
+    _motor_right_b->write(1);
 }
 void Bot::go_down(uint8_t speed)
 {
     float f = convert_speed(speed);
-    _motor_left_a->write(f);
-    _motor_left_b->write(0);
+    _motor_left_a->write(1);
+    _motor_left_b->write(1-f);
     _motor_right_a->write(f);
     _motor_right_b->write(0);
 }
@@ -117,10 +116,10 @@ void Bot::go_right(uint8_t speed)
 void Bot::go_left(uint8_t speed)
 {
     float f = convert_speed(speed);
-    _motor_left_a->write(f);
-    _motor_left_b->write(0);
-    _motor_right_a->write(0);
-    _motor_right_b->write(f);
+    _motor_left_a->write(1);
+    _motor_left_b->write(1-f);
+    _motor_right_a->write(1-f);
+    _motor_right_b->write(1);
 }
 void Bot::stop(void)
 {
@@ -144,10 +143,10 @@ void Bot::skill_e(void)
 }
 void Bot::skill_r(void)
 {
-    _motor_left_a->write(0.5);
-    _motor_left_b->write(1);
-    _motor_right_a->write(0);
-    _motor_right_b->write(1);
+    _motor_left_a->write(1);
+    _motor_left_b->write(0);
+    _motor_right_a->write(0.5);
+    _motor_right_b->write(0);
 }
 void Bot::reverse_bot(void)
 {
