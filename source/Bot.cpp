@@ -14,10 +14,20 @@ Bot::Bot(PinName led,
     _motor_right_b(new DigitalOut(motor_right_b)),
     _relay_q(new DigitalOut(relay_q)),
     _relay_w(new DigitalOut(relay_w)) {
-        reverse = 0;
-        auto_rotate = 0;
-    }
-Bot::Bot() {}
+    reverse = 0;
+    auto_rotate = 0;
+}
+
+Bot::Bot() {
+    //p7, p28, p25, p24, p23, p22, p21
+    _led = new DigitalOut(p7);
+    _motor_left_a = new DigitalOut(p28);
+    _motor_left_b = new PwmOut(p25);
+    _motor_right_a = new PwmOut(p24);
+    _motor_right_b = new DigitalOut(p23);
+    _relay_q = new DigitalOut(p22);
+    _relay_w = new DigitalOut(p21);
+}
 
 void Bot::process(uint8_t g_cmd)
 {
@@ -25,10 +35,11 @@ void Bot::process(uint8_t g_cmd)
     uint8_t speed = g_cmd & 0x0F;
 
     if(action <= 0x40 && reverse) {
-        action ^= 0x30; //0x00 ^ 0x30 = 0x30
-                        //0x10 ^ 0x30 = 0x20
-                        //0x20 ^ 0x30 = 0x10
-                        //0x30 ^ 0x30 = 0x00
+        action ^= 0x30;
+        //0x00 ^ 0x30 = 0x30
+        //0x10 ^ 0x30 = 0x20
+        //0x20 ^ 0x30 = 0x10
+        //0x30 ^ 0x30 = 0x00
     }
     switch(action) {
         case 0x00: /* forward */
@@ -46,11 +57,11 @@ void Bot::process(uint8_t g_cmd)
         case 0x70:
             if(speed == 0x00) {
                 skill_q();
-            } else if (speed == 0x01) {
+            } else if(speed == 0x01) {
                 skill_w();
-            } else if (speed == 0x02) {
+            } else if(speed == 0x02) {
                 skill_e();
-            } else if (speed == 0x03) {
+            } else if(speed == 0x03) {
                 skill_r();
             }
             break;

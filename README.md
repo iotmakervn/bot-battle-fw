@@ -90,7 +90,7 @@ UUID `A000` có 1 Characteristic
 Characteristic UUID: `0xA001`, size 1 byte, Read, Write - dùng để gởi command
 
 
-3. Command sẽ được so sánh để thực hiện các chức năng như sau:
+*Command sẽ được so sánh để thực hiện các chức năng như sau:*
 
 | Giá trị    | chức năng                                      |
 | ---------- | :-------------:                                |
