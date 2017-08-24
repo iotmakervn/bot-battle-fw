@@ -1,6 +1,7 @@
 #include <events/mbed_events.h>
 #include <mbed.h>
 #include "ble/BLE.h"
+#include "ble/services/DFUService.h"
 #include "Bot.h"
 
 Serial pc(p10, p11);
@@ -13,7 +14,7 @@ static EventQueue eventQueue(/* event count */ 10 * EVENTS_EVENT_SIZE);
 
 ReadWriteGattCharacteristic<uint8_t> charCommand(COMMAND_CHAR_UUID, 0);
 GattCharacteristic *charTable[] = {&charCommand};
-
+static DFUService *dfuPtr;
 
 
 Bot Battle(p7, p28, p25, p24, p23, p22, p21);
@@ -73,6 +74,7 @@ void bleInitComplete(BLE::InitializationCompleteCallbackContext *params)
     GattService controlService(CONTROL_SERVICE_UUID, charTable, sizeof(charTable) / sizeof(GattCharacteristic *));
     ble.addService(controlService);
 
+    dfuPtr = new DFUService(ble);
     /* setup advertising */
     ble.gap().accumulateAdvertisingPayload(GapAdvertisingData::BREDR_NOT_SUPPORTED | GapAdvertisingData::LE_GENERAL_DISCOVERABLE);
     ble.gap().accumulateAdvertisingPayload(GapAdvertisingData::COMPLETE_LIST_16BIT_SERVICE_IDS, (uint8_t *)uuid16_list, sizeof(uuid16_list));
