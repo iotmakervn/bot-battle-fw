@@ -14,8 +14,6 @@ static EventQueue eventQueue(/* event count */ 10 * EVENTS_EVENT_SIZE);
 
 ReadWriteGattCharacteristic<uint8_t> charCommand(COMMAND_CHAR_UUID, 0);
 GattCharacteristic *charTable[] = {&charCommand};
-static DFUService *dfuPtr;
-
 
 Bot Battle(p7, p28, p25, p24, p23, p22, p21);
 
@@ -24,7 +22,7 @@ void disconnectionCallback(const Gap::DisconnectionCallbackParams_t *params)
     (void) params;
     BLE::Instance().gap().startAdvertising();
     Battle.disconnect();
-    pc.printf("\n\r Disconnection \n\r");
+    pc.printf("\n\r Disconnected \n\r");
 }
 
 void connectionCallback(const Gap::ConnectionCallbackParams_t *params)
@@ -37,7 +35,7 @@ void onDataWrittenCallback(const GattWriteCallbackParams *params) {
     if((params->handle == charCommand.getValueHandle()) && (params->len == 1)) {
         Battle.process(params->data[0]);
     }
-    pc.printf("received value:%d \n\r", params->data[0]);
+    pc.printf("received value:%x \n\r", params->data[0]);
 }
 
 /**
@@ -74,13 +72,12 @@ void bleInitComplete(BLE::InitializationCompleteCallbackContext *params)
     GattService controlService(CONTROL_SERVICE_UUID, charTable, sizeof(charTable) / sizeof(GattCharacteristic *));
     ble.addService(controlService);
 
-    dfuPtr = new DFUService(ble);
     /* setup advertising */
     ble.gap().accumulateAdvertisingPayload(GapAdvertisingData::BREDR_NOT_SUPPORTED | GapAdvertisingData::LE_GENERAL_DISCOVERABLE);
     ble.gap().accumulateAdvertisingPayload(GapAdvertisingData::COMPLETE_LIST_16BIT_SERVICE_IDS, (uint8_t *)uuid16_list, sizeof(uuid16_list));
     ble.gap().accumulateAdvertisingPayload(GapAdvertisingData::COMPLETE_LOCAL_NAME, (uint8_t *)DEVICE_NAME, sizeof(DEVICE_NAME));
     ble.gap().setAdvertisingType(GapAdvertisingParams::ADV_CONNECTABLE_UNDIRECTED);
-    ble.gap().setAdvertisingInterval(1000); /* 1000ms. */
+    ble.gap().setAdvertisingInterval(100); /* 1000ms. */
     ble.gap().startAdvertising();
 }
 

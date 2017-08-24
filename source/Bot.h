@@ -9,13 +9,13 @@
 */
 class Bot {
 private:
-    DigitalOut  *_led;
-    DigitalOut  *_motor_left_a;
-    PwmOut  *_motor_left_b;
-    PwmOut  *_motor_right_a;
-    DigitalOut  *_motor_right_b;
-    DigitalOut  *_relay_q;
-    DigitalOut  *_relay_w;
+    DigitalOut *_led;
+    PwmOut      *_motor_left_dir;
+    PwmOut     *_motor_left_pwm;
+    PwmOut     *_motor_right_pwm;
+    PwmOut     *_motor_right_dir;
+    DigitalOut *_relay_q;
+    DigitalOut *_relay_w;
     uint8_t reverse;
     uint8_t auto_rotate;
     float convert_speed(uint8_t speed);
@@ -24,10 +24,10 @@ public:
     *contructor to changing pinname
     */
     Bot(PinName led,
-        PinName motor_left_a,
-        PinName motor_left_b,
-        PinName motor_right_a,
-        PinName motor_right_b,
+        PinName pin_left_dir,
+        PinName pin_left_pwm,
+        PinName pin_right_pwm,
+        PinName pin_right_dir,
         PinName relay_q,
         PinName relay_w);
     Bot();
@@ -41,6 +41,8 @@ public:
     void go_down(uint8_t speed);
     void go_right(uint8_t speed);
     void go_left(uint8_t speed);
+    void left(uint8_t forward, float pwm);
+    void right(uint8_t forward, float pwm);
     void skill_q(void);
     void skill_w(void);
     void skill_e(void);

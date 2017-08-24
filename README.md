@@ -61,14 +61,20 @@ Chương trình sẽ chạy trên BOARD VBLUno nên target sẽ chọn là **VBL
 mbed target VBLUNO51_LEGACY
 ```
 
-6. Compile chương trình
+6. Apply patch for 4 PWM
+
+```
+git apply pwm.patch
+```
+
+7. Compile chương trình
 
 ```
 mbed compile
 ```
+hoặc `make flash`
 
-
-7. Sau khi Compile thành công, file HEX được tạo sẽ nằm trong thư mục có cấu trúc như sau: ```BUILD/<target-name>/<toolchain>```
+8. Sau khi Compile thành công, file HEX được tạo sẽ nằm trong thư mục có cấu trúc như sau: ```BUILD/<target-name>/<toolchain>```
 
 	Trong project này thư mục sẽ là ```BUILD/VBLUNO51_LEGACY/GCC_ARM```
 
@@ -99,11 +105,12 @@ Characteristic UUID: `0xA001`, size 1 byte, Read, Write - dùng để gởi comm
 | 0x2n       | xoay phải tốc độ n (0..F)                      |
 | 0x3n       | chạy lùi tốc độ n (0..F)                       |
 | 0x50       | Dừng                                           |
+| 0x61       | turn on reverse robot                          |
+| 0x60       | turn off reverse robot                         |
 | 0x70       | turn on skill Q                                |
 | 0x71       | turn on skill W                                |
 | 0x72       | turn on skill E                                |
 | 0x73       | turn on skill R                                |
-| 0x81       | turn on reverse robot                          |
-| 0x80       | turn off reverse robot                         |
-| 0x91       | Vào chế độ tự động xoay khi mất kết nối        |
-| 0x90       | Thoát chế độ tự động xoay khi mất kết nối      |
+| 0b10abyyyyy| lái từng bánh xe, b=0-left/1-right, a=forwad/backward, yyyy = speed                           |
+| 0x41       | Vào chế độ tự động xoay khi mất kết nối        |
+| 0x40       | Thoát chế độ tự động xoay khi mất kết nối      |
