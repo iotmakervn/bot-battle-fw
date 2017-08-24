@@ -61,14 +61,20 @@ Chương trình sẽ chạy trên BOARD VBLUno nên target sẽ chọn là **VBL
 mbed target VBLUNO51_LEGACY
 ```
 
-6. Compile chương trình
+6. Apply patch for 4 PWM
+
+```
+git apply pwm.patch
+```
+
+7. Compile chương trình
 
 ```
 mbed compile
 ```
+hoặc `make flash`
 
-
-7. Sau khi Compile thành công, file HEX được tạo sẽ nằm trong thư mục có cấu trúc như sau: ```BUILD/<target-name>/<toolchain>```
+8. Sau khi Compile thành công, file HEX được tạo sẽ nằm trong thư mục có cấu trúc như sau: ```BUILD/<target-name>/<toolchain>```
 
 	Trong project này thư mục sẽ là ```BUILD/VBLUNO51_LEGACY/GCC_ARM```
 
@@ -78,38 +84,33 @@ mbed compile
 
 9. Reset lại chip.
 
-GIAO THỨC BLE ĐƯỢC DÙNG TRONG ỨNG DỤNG BOTBATTLE
----------------------------------------------------
-
-1. Service
-
-Ứng dụng này sẽ dùng một service có tên là CONTROLservice dùng để điều khiển robot. UUID:{A000}
-
-2. Characteristic
-
-UART service sẽ có characteristic là State
-
-**State-characteristic**
-
-* UUID:{A001}
-
-* Chức năng: Nhận dữ  liệu từ BLE central (smartphone)
-
-* Các thao tác dữ liệu: READ/WRITE
+### GIAO THỨC BLE ĐƯỢC DÙNG TRONG ỨNG DỤNG BOTBATTLE
 
 
+#### Service
 
-3. Dữ liệu được nhận từ State_characteristic sẽ được so sánh để thực hiện các chức năng như sau:
+UUID `A000` có 1 Characteristic
 
-| Giá trị | chức năng |
-| ---------- |:-------------:|
-|  1  | go up |
-|  2  | turn left |
-|  3  | go down |
-|  4  | turn right |
-|  5  | stop motion |
-|  7  | turn on skill Q |
-|  9  | turn on skill W |
-|  12  | turn on skill E |
-|  16  | turn on skill R |
-|  19  | turn on reverse robot |
+#### Characteristic
+
+Characteristic UUID: `0xA001`, size 1 byte, Read, Write - dùng để gởi command
+
+
+*Command sẽ được so sánh để thực hiện các chức năng như sau:*
+
+| Giá trị    | chức năng                                      |
+| ---------- | :-------------:                                |
+| 0x0n       | chạy tới với tốc độ n (0..F), ví dụ 0x01, 0x05 |
+| 0x1n       | xoay trái tốc độ n (0..F), ví dụ 0x11, 0x1F    |
+| 0x2n       | xoay phải tốc độ n (0..F)                      |
+| 0x3n       | chạy lùi tốc độ n (0..F)                       |
+| 0x50       | Dừng                                           |
+| 0x61       | turn on reverse robot                          |
+| 0x60       | turn off reverse robot                         |
+| 0x70       | turn on skill Q                                |
+| 0x71       | turn on skill W                                |
+| 0x72       | turn on skill E                                |
+| 0x73       | turn on skill R                                |
+| 0b10abyyyyy| lái từng bánh xe, b=0-left/1-right, a=forwad/backward, yyyy = speed                           |
+| 0x41       | Vào chế độ tự động xoay khi mất kết nối        |
+| 0x40       | Thoát chế độ tự động xoay khi mất kết nối      |

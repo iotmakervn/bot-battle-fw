@@ -1,0 +1,24 @@
+--- a/mbed-os/targets/TARGET_NORDIC/TARGET_MCU_NRF51822/pwmout_api.c
++++ b/mbed-os/targets/TARGET_NORDIC/TARGET_MCU_NRF51822/pwmout_api.c
+@@ -19,7 +19,7 @@
+ #include "pinmap.h"
+ #include "mbed_error.h"
+
+-#define NO_PWMS         3
++#define NO_PWMS         4
+ #define TIMER_PRECISION 4 //4us ticks
+ #define TIMER_PRESCALER 6 //4us ticks  =   16Mhz/(2**6)
+ static const PinMap PinMap_PWM[] = {
+@@ -60,9 +60,9 @@ static NRF_TIMER_Type *Timers[1] = {
+ };
+
+ uint16_t PERIOD            = 20000 / TIMER_PRECISION;  //20ms
+-uint8_t PWM_taken[NO_PWMS] = {0, 0, 0};
+-uint16_t PULSE_WIDTH[NO_PWMS] = {1, 1, 1}; //set to 1 instead of 0
+-uint16_t ACTUAL_PULSE[NO_PWMS] = {0, 0, 0};
++uint8_t PWM_taken[NO_PWMS] = {0, 0, 0, 0};
++uint16_t PULSE_WIDTH[NO_PWMS] = {1, 1, 1, 1}; //set to 1 instead of 0
++uint16_t ACTUAL_PULSE[NO_PWMS] = {0, 0, 0, 0};
+
+
+ /** @brief Function for handling timer 2 peripheral interrupts.

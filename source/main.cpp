@@ -1,6 +1,7 @@
 #include <events/mbed_events.h>
 #include <mbed.h>
 #include "ble/BLE.h"
+#include "ble/services/DFUService.h"
 #include "Bot.h"
 
 Serial pc(p10, p11);
@@ -14,21 +15,19 @@ static EventQueue eventQueue(/* event count */ 10 * EVENTS_EVENT_SIZE);
 ReadWriteGattCharacteristic<uint8_t> charCommand(COMMAND_CHAR_UUID, 0);
 GattCharacteristic *charTable[] = {&charCommand};
 
-
-
-Bot Battle(p7, p28, p25, p24, p23, p22, p21);
+Bot Battle(p7, p28, p25, p24, p23, p21, p22);
 
 void disconnectionCallback(const Gap::DisconnectionCallbackParams_t *params)
 {
     (void) params;
     BLE::Instance().gap().startAdvertising();
-    Battle.disconnection();
-    pc.printf("\n\r Disconnection \n\r");
+    Battle.disconnect();
+    pc.printf("\n\r Disconnected \n\r");
 }
 
 void connectionCallback(const Gap::ConnectionCallbackParams_t *params)
 {
-    Battle.connection();
+    Battle.connect();
     pc.printf("\n\r Connected\n\r Ready!");
 }
 
@@ -36,7 +35,7 @@ void onDataWrittenCallback(const GattWriteCallbackParams *params) {
     if((params->handle == charCommand.getValueHandle()) && (params->len == 1)) {
         Battle.process(params->data[0]);
     }
-    pc.printf("received value:%d \n\r", params->data[0]);
+    pc.printf("received value:%x \n\r", params->data[0]);
 }
 
 /**
@@ -78,7 +77,7 @@ void bleInitComplete(BLE::InitializationCompleteCallbackContext *params)
     ble.gap().accumulateAdvertisingPayload(GapAdvertisingData::COMPLETE_LIST_16BIT_SERVICE_IDS, (uint8_t *)uuid16_list, sizeof(uuid16_list));
     ble.gap().accumulateAdvertisingPayload(GapAdvertisingData::COMPLETE_LOCAL_NAME, (uint8_t *)DEVICE_NAME, sizeof(DEVICE_NAME));
     ble.gap().setAdvertisingType(GapAdvertisingParams::ADV_CONNECTABLE_UNDIRECTED);
-    ble.gap().setAdvertisingInterval(1000); /* 1000ms. */
+    ble.gap().setAdvertisingInterval(100); /* 1000ms. */
     ble.gap().startAdvertising();
 }
 
