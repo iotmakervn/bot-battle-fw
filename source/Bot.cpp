@@ -16,6 +16,10 @@ Bot::Bot(PinName led,
     _relay_w(new DigitalOut(relay_w)) {
     reverse = 0;
     auto_rotate = 0;
+    active_skill_e = 0;
+    active_skill_r = 0;
+    r_flag = 0;
+    _ticker.attach(callback(this, &Bot::tick), 0.2);
 }
 
 Bot::Bot() {
@@ -25,8 +29,8 @@ Bot::Bot() {
     _motor_left_pwm = new PwmOut(p25);
     _motor_right_pwm = new PwmOut(p24);
     _motor_right_dir = new PwmOut(p23);
-    _relay_q = new DigitalOut(p22);
-    _relay_w = new DigitalOut(p21);
+    _relay_q = new DigitalOut(p21);
+    _relay_w = new DigitalOut(p22);
 }
 
 void Bot::process(uint8_t g_cmd)
@@ -136,17 +140,25 @@ void Bot::skill_q(void)
 }
 void Bot::skill_w(void)
 {
-    _relay_w->write(!_relay_w->read());
+    skill_q();
+    left(1, 1);
+    right(1, 1);
 }
 void Bot::skill_e(void)
 {
-    go_right(15);
-    _relay_q->write(1);
+    if(active_skill_e) {
+        active_skill_e = 0;
+    } else {
+        active_skill_e = 7;
+    }
 }
 void Bot::skill_r(void)
 {
-    left(0, 15);
-    right(0, 15);
+    if(active_skill_r) {
+        active_skill_r = 0;
+    } else {
+        active_skill_r = 0xFFFF;
+    }
 }
 void Bot::reverse_bot(void)
 {
@@ -161,12 +173,37 @@ float Bot::convert_speed(uint8_t speed)
     }
     return f;
 }
+void Bot::tick()
+{
+    if(active_skill_e == 7) {
+        left(1, 1);
+        right(0, 1);
+        active_skill_e --;
+    } else if(active_skill_e < 7 && active_skill_e > 1) {
+        left(0, 1);
+        active_skill_e --;
+    } else if(active_skill_e == 1) {
+        right(1, 1);
+        left(1, 1);
+        active_skill_e = 0;
+    }
+
+    if(active_skill_r > 0) {
+        active_skill_r --;
+        r_flag ^= 0x01;
+        if(active_skill_r % 5 == 0) {
+            right(r_flag, 1);
+            left(1 - r_flag, 1);
+        }
+    }
+}
 
 void Bot::left(uint8_t forward, float pwm)
 {
     if(pwm == 0) {
         _motor_left_dir->write(0);
         _motor_left_pwm->write(pwm);
+        return;
     }
     if(forward) {
         _motor_left_dir->write(0);
@@ -181,6 +218,7 @@ void Bot::right(uint8_t forward, float pwm)
     if(pwm == 0) {
         _motor_right_dir->write(0);
         _motor_right_pwm->write(pwm);
+        return;
     }
     if(forward) {
         _motor_right_dir->write(0);

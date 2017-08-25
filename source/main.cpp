@@ -15,7 +15,7 @@ static EventQueue eventQueue(/* event count */ 10 * EVENTS_EVENT_SIZE);
 ReadWriteGattCharacteristic<uint8_t> charCommand(COMMAND_CHAR_UUID, 0);
 GattCharacteristic *charTable[] = {&charCommand};
 
-Bot Battle(p7, p28, p25, p24, p23, p22, p21);
+Bot Battle(p7, p28, p25, p24, p23, p21, p22);
 
 void disconnectionCallback(const Gap::DisconnectionCallbackParams_t *params)
 {

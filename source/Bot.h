@@ -16,8 +16,12 @@ private:
     PwmOut     *_motor_right_dir;
     DigitalOut *_relay_q;
     DigitalOut *_relay_w;
+    uint8_t    active_skill_e;
+    uint16_t    active_skill_r, r_flag;
     uint8_t reverse;
     uint8_t auto_rotate;
+    Ticker _ticker;
+    void tick();
     float convert_speed(uint8_t speed);
 public:
     /**
