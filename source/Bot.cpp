@@ -18,6 +18,7 @@ Bot::Bot(PinName led,
     auto_rotate = 0;
     active_skill_e = 0;
     active_skill_r = 0;
+    rotate_revert = 0;
     r_flag = 0;
     _ticker.attach(callback(this, &Bot::tick), 0.2);
 }
@@ -59,12 +60,14 @@ void Bot::process(uint8_t g_cmd)
             go_down(speed);
             break;
         case 0x40:
-            auto_rotate = speed;
+            // auto_rotate = speed;
+
+            break;
         case 0x50:
             stop();
             break;
         case 0x60:
-            reverse = speed;
+            _relay_w->write(speed);
             break;
         case 0x70:
             if(speed == 0x00) {
@@ -146,19 +149,20 @@ void Bot::skill_w(void)
 }
 void Bot::skill_e(void)
 {
-    if(active_skill_e) {
-        active_skill_e = 0;
-    } else {
-        active_skill_e = 7;
-    }
+    left(0, 1);
+    right(0, 1);
 }
 void Bot::skill_r(void)
 {
-    if(active_skill_r) {
-        active_skill_r = 0;
+    rotate_revert ^= 1;
+    if(rotate_revert) {
+        left(1, 1);
+        right(0, 1);
     } else {
-        active_skill_r = 0xFFFF;
+        left(0, 1);
+        right(1, 1);
     }
+
 }
 void Bot::reverse_bot(void)
 {
