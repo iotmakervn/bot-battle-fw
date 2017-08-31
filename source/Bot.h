@@ -20,6 +20,7 @@ private:
     uint16_t    active_skill_r, r_flag;
     uint8_t reverse;
     uint8_t auto_rotate;
+    uint8_t rotate_revert;
     Ticker _ticker;
     void tick();
     float convert_speed(uint8_t speed);

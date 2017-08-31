@@ -15,7 +15,7 @@ static EventQueue eventQueue(/* event count */ 10 * EVENTS_EVENT_SIZE);
 ReadWriteGattCharacteristic<uint8_t> charCommand(COMMAND_CHAR_UUID, 0);
 GattCharacteristic *charTable[] = {&charCommand};
 
-Bot Battle(p7, p28, p25, p24, p23, p21, p22);
+Bot Battle(p7, p28, p25, p24, p23, p21, p9);
 
 void disconnectionCallback(const Gap::DisconnectionCallbackParams_t *params)
 {
@@ -64,6 +64,9 @@ void bleInitComplete(BLE::InitializationCompleteCallbackContext *params)
     if(ble.getInstanceID() != BLE::DEFAULT_INSTANCE) {
         return;
     }
+    ble_gap_conn_sec_mode_t security;
+    BLE_GAP_CONN_SEC_MODE_SET_OPEN(&security);
+    sd_ble_gap_device_name_set(&security, (const uint8_t *)DEVICE_NAME, (uint16_t)strlen(DEVICE_NAME));
 
     ble.gap().onDisconnection(disconnectionCallback);
     ble.gap().onConnection(connectionCallback);
@@ -79,6 +82,8 @@ void bleInitComplete(BLE::InitializationCompleteCallbackContext *params)
     ble.gap().setAdvertisingType(GapAdvertisingParams::ADV_CONNECTABLE_UNDIRECTED);
     ble.gap().setAdvertisingInterval(100); /* 1000ms. */
     ble.gap().startAdvertising();
+
+
 }
 
 void scheduleBleEventsProcessing(BLE::OnEventsToProcessCallbackContext* context) {
